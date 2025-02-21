@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nutrient Counter</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h1>Welcome to Nutrient Counter!</h1>
+
+<a href="{% url 'add-food' %}">Add a New Food Item</a> |
+<a href="{% url 'update-goals' %}">Set Nutrition Goals</a> |
+<a href="{% url 'logout' %}">Logout</a>
+
+<hr>
+<h2>Available Foods</h2>
+<ul>
+  {% for item in foods %}
+    <li>{{ item.name }} ({{ item.calories }} kcal)</li>
+  {% endfor %}
+</ul>
+
+<div>
+    <canvas id="goalBarChart" width="400" height="200"></canvas>
+</div>
+
+<script>
+    fetch('/chart-data/')
+        .then(response => response.json())
+        .then(data => {
+            let totalCarbs = data.carbs.reduce((a, b) => a + b, 0);
+            let totalProteins = data.proteins.reduce((a, b) => a + b, 0);
+            let totalFats = data.fats.reduce((a, b) => a + b, 0);
+            let totalCalories = data.calories.reduce((a, b) => a + b, 0);
+
+            let goalCarbs = data.goal_carbs;
+            let goalProteins = data.goal_proteins;
+            let goalFats = data.goal_fats;
+            let goalCalories = data.goal_calories;
+
+            new Chart(document.getElementById('goalBarChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Carbs', 'Proteins', 'Fats', 'Calories'],
+                    datasets: [
+                        {
+                            label: 'Consumed',
+                            data: [totalCarbs, totalProteins, totalFats, totalCalories],
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                        },
+                        {
+                            label: 'Goal',
+                            data: [goalCarbs, goalProteins, goalFats, goalCalories],
+                            backgroundColor: 'rgba(255, 99, 132, 0.6)'
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching chart data:', error));
+</script>
+
+</body>
+</html>
