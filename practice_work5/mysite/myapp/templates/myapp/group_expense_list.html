@@ -1,0 +1,53 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block body %}
+<div class="m-10">
+    <div class="flex justify-between items-center mb-5">
+        <h1 class="text-2xl font-bold">Group Expenses</h1>
+        <a href="{% url 'add_group_expense' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            Add Group Expense
+        </a>
+    </div>
+
+    <table class="min-w-full bg-white shadow-md rounded">
+        <thead class="bg-gray-200 border-b">
+            <tr>
+                <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Name</th>
+                <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Amount</th>
+                <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Date</th>
+                <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Participants</th>
+                <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Per Person</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for exp in expenses %}
+            <tr class="border-b hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                    {{ exp.name }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                    {{ exp.amount }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                    {{ exp.date }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                    {% for usr in exp.users.all %}
+                        {{ usr.username }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-bold">
+                    {{ exp.split_expense }}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="px-6 py-4 text-gray-500 text-sm">
+                    No group expenses yet.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

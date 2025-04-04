@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'myapp/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'myapp/style.css' %}">
+
+    <title>Expense Tracker</title>
+</head>
+<body>
+    <nav class="shadow-lg p-5 bg-white">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <a href="#">
+                    <img class="h-10" src="{% static 'myapp/images/wallet.png' %}" alt="Logo">
+                </a>
+                <span class="text-xl font-bold">Expense Tracker</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <a href="{% url 'index' %}" class="text-gray-700 hover:underline">
+                    Home
+                </a>
+                <a href="{% url 'category_list' %}" class="text-gray-700 hover:underline">
+                    Categories
+                </a>
+                <a href="{% url 'group_expense_list' %}" class="text-gray-700 hover:underline">
+                    Group Expenses
+                </a>
+                <a href="{% url 'account_logout' %}" class="text-gray-700 hover:underline">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    {% block body %}
+    {% endblock %}
+</body>
+</html>
